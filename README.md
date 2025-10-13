@@ -24,7 +24,7 @@ Game ini tidak memerlukan instalasi atau server khusus. Cukup ikuti langkah-lang
 
 Unduh atau Clone Repositori
 
-```git clone https://github.com/NAMA_USER_ANDA/NAMA_REPO_ANDA.git```
+```git clone https://github.com/nursyabnii/speed-scramble.git```
 (Atau cukup unduh file ZIP jika Anda tidak menggunakan Git)
 
 Buka Folder Proyek
