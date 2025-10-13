@@ -33,10 +33,13 @@ const translations = {
         backToMenuButton: "Kembali ke Menu",
         feedbackCorrect: "Benar! +5 detik",
         feedbackWrong: "Coba lagi!",
+        feedbackWrongPenalty: "Salah! -5 detik", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
         newRecordFeedback: "SELAMAT! REKOR BARU: {score}",
         finalScoreFeedback: "Skor Akhir Kamu: {score}",
-        alertChooseCategory: "Pilih kategori terlebih dahulu!"
+        alertChooseCategory: "Pilih kategori terlebih dahulu!",
+        categoryCompleteTitle: "KATEGORI SELESAI",
+        categoryCompleteFeedback: "Hebat! Kamu menyelesaikan semua kata di kategori ini. Skor Akhir: {score}"
     },
     en: {
         title: "Speed Scramble",
@@ -52,10 +55,13 @@ const translations = {
         backToMenuButton: "Back to Menu",
         feedbackCorrect: "Correct! +5 seconds",
         feedbackWrong: "Try again!",
+        feedbackWrongPenalty: "Wrong! -5 seconds", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
         newRecordFeedback: "CONGRATS! NEW HIGH SCORE: {score}",
         finalScoreFeedback: "Your Final Score: {score}",
-        alertChooseCategory: "Please choose a category first!"
+        alertChooseCategory: "Please choose a category first!",
+        categoryCompleteTitle: "CATEGORY COMPLETE",
+        categoryCompleteFeedback: "Great! You finished all words in this category. Final Score: {score}"
     }
 };
 
@@ -131,7 +137,7 @@ const wordData = {
             "SIRIH", "PAKIS", "LUMUT", "JAMUR", "ALANG-ALANG", "RUMPUT", "PUTRI MALU", "ECENG GONDOK", "KANGKUNG", "BAYAM",
             "SAWI", "SELADA", "BROKOLI", "KEMBANG KOL", "KUBIS", "TOMAT", "CABAI", "TERONG", "TIMUN", "PARE",
             "LABU", "BAWANG MERAH", "BAWANG PUTIH", "KENTANG", "WORTEL", "SINGKONG", "UBI JALAR", "TALAS", "KACANG TANAH", "KEDELAI",
-            "KACANG HIJAU", "KACANG PANJANG", "BUNCIS", "PETAI", "JENGKOL", "LIDAH MERTUA", "MONSTERA", "AGLAONEMA", "CALADIUM", "BEGONIA",
+            "KACANG HIJO", "KACANG PANJANG", "BUNCIS", "PETAI", "JENGKOL", "LIDAH MERTUA", "MONSTERA", "AGLAONEMA", "CALADIUM", "BEGONIA",
             "SIRIH GADING", "WIJAYAKUSUMA", "KEMBANG SEPATU", "POHON ASAM", "POHON MANGGA", "POHON RAMBUTAN", "POHON DURIAN", "BAKAU", "EDELWEISS", "KANTONG SEMAR"
         ]
     },
@@ -165,7 +171,7 @@ const wordData = {
             "GUAVA", "RAMBUTAN", "DURIAN", "MANGOSTEEN", "SNAKE FRUIT", "LYCHEE", "LONGAN", "AVOCADO", "DRAGON FRUIT", "KIWI",
             "PEAR", "CHERRY", "PEACH", "PLUM", "APRICOT", "POMEGRANATE", "STARFRUIT", "SOURSOP", "SAPODILLA", "DUKU",
             "JACKFRUIT", "CEMPEDAK", "PASSION FRUIT", "WATER APPLE", "AMBARELLA", "COCONUT", "DATE", "OLIVE", "FIG", "BLACKBERRY",
-            "RASPBERRY", "BLUEBERRY", "CRANBERRY", "GOJI BERRY", "LIME", "LEMON", "KEY LIME", "POMELO", "SUGAR APPLE", "MULBERRY",
+            "RASPBERRY", "BLUEBERRY", "CRANBERry", "GOJI BERRY", "LIME", "LEMON", "KEY LIME", "POMELO", "SUGAR APPLE", "MULBERRY",
             "MALAY APPLE", "GANDARIA", "MATOA", "TAMARIND", "JICAMA", "PERSIMMON", "JUJUBE", "CERMAI", "PHYSALIS", "TOMATO",
             "CUCUMBER", "PUMPKIN", "BREADFRUIT", "EGGPLANT", "CORN", "TARO", "SWEET POTATO", "CASSAVA", "POTATO", "CARROT",
             "BEET", "RADISH", "RAISIN", "PRUNE", "NECTARINE", "GRAPEFRUIT", "KUMQUAT", "FEIJOA", "GUAVA", "LANGSAT",
@@ -219,6 +225,7 @@ let score = 0;
 let timer;
 let timerInterval;
 let highScore = 0;
+let usedWords = []; // MODIFIED: To track used words in a game session
 const HIGH_SCORE_KEY = 'acakKataHighScore';
 const LANG_KEY = 'acakKataLang';
 
@@ -270,12 +277,40 @@ function updateHighScoreDisplay() {
     highScoreGameEl.textContent = highScore;
 }
 
-function scrambleWord(word) { let scrambled = word.split('').sort(() => Math.random() - 0.5).join(''); if (word.length > 2 && scrambled === word) { return scrambleWord(word); } return scrambled; }
+function scrambleWord(word) {
+    let scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+    if (word.length > 2 && scrambled === word) {
+        return scrambleWord(word);
+    }
+    return scrambled;
+}
 
 function newRound() {
+    // MODIFIED: Logic to ensure words are unique
     const wordsInCategory = wordData[currentLanguage][selectedCategory];
-    const randomIndex = Math.floor(Math.random() * wordsInCategory.length);
-    currentWord = wordsInCategory[randomIndex];
+    const availableWords = wordsInCategory.filter(word => !usedWords.includes(word));
+
+    if (availableWords.length === 0) {
+        // Handle category completion
+        clearInterval(timerInterval);
+        scrambledWordEl.textContent = translations[currentLanguage].categoryCompleteTitle;
+        feedbackEl.textContent = translations[currentLanguage].categoryCompleteFeedback.replace('{score}', score);
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem(HIGH_SCORE_KEY, highScore);
+            updateHighScoreDisplay();
+            feedbackEl.textContent = translations[currentLanguage].newRecordFeedback.replace('{score}', score);
+        }
+        wordInputEl.disabled = true;
+        checkButton.classList.add('hidden');
+        resetButton.classList.remove('hidden');
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableWords.length);
+    currentWord = availableWords[randomIndex];
+    usedWords.push(currentWord); // Add word to the used list
+
     scrambledWordEl.textContent = scrambleWord(currentWord);
     wordInputEl.value = "";
     feedbackEl.textContent = "";
@@ -284,28 +319,42 @@ function newRound() {
 
 function checkAnswer() {
     if (wordInputEl.value.trim() === '') return;
+
     const playerAnswer = wordInputEl.value.toUpperCase();
     if (playerAnswer === currentWord) {
         score += 10;
-        timer += 5;
+        // MODIFIED: Timer caps at 20 seconds
+        timer = Math.min(20, timer + 5);
         scoreEl.textContent = score;
         timerEl.textContent = timer;
         feedbackEl.textContent = translations[currentLanguage].feedbackCorrect;
         feedbackEl.className = "feedback correct";
         setTimeout(newRound, 500);
     } else {
-        feedbackEl.textContent = translations[currentLanguage].feedbackWrong;
+        // MODIFIED: Penalty for wrong answer
+        timer -= 5;
+        if (timer < 0) timer = 0; // Prevent negative timer
+        timerEl.textContent = timer;
+        feedbackEl.textContent = translations[currentLanguage].feedbackWrongPenalty;
         feedbackEl.className = "feedback wrong";
+        if (timer <= 0) {
+            gameOver();
+        }
     }
 }
 
 function startTimer() {
-    timer = 30;
+    // MODIFIED: Initial timer is 20 seconds
+    timer = 20;
     timerEl.textContent = timer;
     timerInterval = setInterval(() => {
         timer--;
         timerEl.textContent = timer;
-        if (timer <= 0) { timer = 0; timerEl.textContent = timer; gameOver(); }
+        if (timer <= 0) {
+            timer = 0;
+            timerEl.textContent = timer;
+            gameOver();
+        }
     }, 1000);
 }
 
@@ -342,6 +391,8 @@ function startGame() {
     gameAreaEl.classList.remove('hidden');
     langSwitcherEl.classList.add('disabled');
 
+    // MODIFIED: Reset the used words array for the new game
+    usedWords = [];
     score = 0;
     scoreEl.textContent = score;
     wordInputEl.disabled = false;
