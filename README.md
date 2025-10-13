@@ -62,6 +62,7 @@ const wordData = {
         "New Category 💡": ["WORD1", "WORD2", "WORD3"],
         // ... other categories
     }
-};```
+};
+```
 
 Pastikan untuk menambahkan kategori dan kata yang sesuai untuk kedua bahasa (id dan en).
