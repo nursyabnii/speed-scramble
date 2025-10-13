@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="title">Acak Kata Cepat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="game-container">
+        <div class="lang-switcher">
+            <img src="https://flagcdn.com/w40/id.png" alt="Indonesia" id="lang-id" class="lang-flag active">
+            <img src="https://flagcdn.com/w40/gb.png" alt="English" id="lang-en" class="lang-flag">
+        </div>
+
+        <h1 data-lang-key="title">Acak Kata Cepat</h1>
+
+        <div id="category-selection">
+            <div class="high-score-display">
+                <span data-lang-key="highScoreLabel">🏆 Skor Tertinggi</span>: <span id="high-score-start">0</span>
+            </div>
+            <p class="description" data-lang-key="categoryDescription">Pilih kategori untuk memulai permainan!</p>
+            <select id="category-selector">
+                <option value="" data-lang-key="selectCategoryOption">-- Pilih Kategori --</option>
+            </select>
+            <button id="start-game-button" data-lang-key="startGameButton">Mulai Game</button>
+        </div>
+
+        <div id="game-area" class="hidden">
+            <div class="info-bar">
+                <div class="info-item">
+                    <span data-lang-key="scoreLabel">Skor</span>: <span id="score-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span data-lang-key="timeLabel">Waktu</span>: <span id="timer-value">30</span>s
+                </div>
+                <div class="info-item">
+                    <span data-lang-key="highScoreLabelShort">Tertinggi</span>: <span id="high-score-game">0</span>
+                </div>
+            </div>
+
+            <div id="scrambled-word" class="scrambled-word"></div>
+
+            <input type="text" id="word-input" data-lang-key-placeholder="inputPlaceholder"
+                placeholder="Ketik jawabanmu di sini..." autocomplete="off">
+
+            <button id="check-button" data-lang-key="checkAnswerButton">Periksa Jawaban</button>
+            <button id="reset-button" class="hidden" data-lang-key="backToMenuButton">Kembali ke Menu</button>
+
+            <p id="feedback" class="feedback"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
