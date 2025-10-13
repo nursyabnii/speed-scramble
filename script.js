@@ -31,7 +31,7 @@ const translations = {
         inputPlaceholder: "Ketik jawabanmu di sini...",
         checkAnswerButton: "Periksa Jawaban",
         backToMenuButton: "Kembali ke Menu",
-        feedbackCorrect: "Benar! +5 detik",
+        feedbackCorrect: "Benar! +2 detik",
         feedbackWrong: "Coba lagi!",
         feedbackWrongPenalty: "Salah! -3 detik", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
@@ -54,7 +54,7 @@ const translations = {
         inputPlaceholder: "Type your answer here...",
         checkAnswerButton: "Check Answer",
         backToMenuButton: "Back to Menu",
-        feedbackCorrect: "Correct! +5 seconds",
+        feedbackCorrect: "Correct! +2 seconds",
         feedbackWrong: "Try again!",
         feedbackWrongPenalty: "Wrong! -3 seconds", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
@@ -326,7 +326,7 @@ function checkAnswer() {
     if (playerAnswer === currentWord) {
         score += 10;
         // MODIFIED: Timer caps at 30 seconds
-        timer = Math.min(30, timer + 5);
+        timer = Math.min(30, timer + 2);
         scoreEl.textContent = score;
         timerEl.textContent = timer;
         feedbackEl.textContent = translations[currentLanguage].feedbackCorrect;

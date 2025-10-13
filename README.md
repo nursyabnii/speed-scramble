@@ -42,8 +42,10 @@ Game siap dimainkan!
 3. Mulai Game: Tekan tombol "Mulai Game".
 4. Tebak Kata: Lihat huruf-huruf yang diacak, lalu ketik jawaban Anda di kotak input.
 5. Periksa Jawaban: Tekan tombol "Periksa Jawaban" atau tekan Enter.
-6. Kumpulkan Skor: Jika jawaban benar, skor Anda akan bertambah 10 poin dan waktu akan bertambah 5 detik.
-7. Pecahkan Rekor: Permainan berakhir saat waktu habis. Jika skor Anda melebihi rekor sebelumnya, skor tertinggi yang baru akan disimpan.
+6. Waktu Permainan: Waktu dimulai dari 30 detik, dan jumlah maksimal waktu bertambah yaitu 30 detik.
+7. Kumpulkan Skor: Jika jawaban benar, skor Anda akan bertambah 10 poin dan waktu akan bertambah 2 detik.
+8. Pengurangan Waktu: Jika jawaban salah, waktu akan berkurang 3 detik.
+9. Pecahkan Rekor: Permainan berakhir saat waktu habis. Jika skor Anda melebihi rekor sebelumnya, skor tertinggi yang baru akan disimpan.
 
 ## 🔧 Kustomisasi
 Anda dapat dengan mudah menambahkan kata, kategori, atau bahkan bahasa baru dengan mengedit file script.js.
