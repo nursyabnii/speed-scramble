@@ -33,10 +33,11 @@ const translations = {
         backToMenuButton: "Kembali ke Menu",
         feedbackCorrect: "Benar! +5 detik",
         feedbackWrong: "Coba lagi!",
-        feedbackWrongPenalty: "Salah! -2 detik", // MODIFIED: Added new feedback for penalty
+        feedbackWrongPenalty: "Salah! -3 detik", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
         newRecordFeedback: "SELAMAT! REKOR BARU: {score}",
         finalScoreFeedback: "Skor Akhir Kamu: {score}",
+        gameOverAnswer: "Jawabannya: {word}",
         alertChooseCategory: "Pilih kategori terlebih dahulu!",
         categoryCompleteTitle: "KATEGORI SELESAI",
         categoryCompleteFeedback: "Hebat! Kamu menyelesaikan semua kata di kategori ini. Skor Akhir: {score}"
@@ -55,10 +56,11 @@ const translations = {
         backToMenuButton: "Back to Menu",
         feedbackCorrect: "Correct! +5 seconds",
         feedbackWrong: "Try again!",
-        feedbackWrongPenalty: "Wrong! -2 seconds", // MODIFIED: Added new feedback for penalty
+        feedbackWrongPenalty: "Wrong! -3 seconds", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
         newRecordFeedback: "CONGRATS! NEW HIGH SCORE: {score}",
         finalScoreFeedback: "Your Final Score: {score}",
+        gameOverAnswer: "The answer was: {word}",
         alertChooseCategory: "Please choose a category first!",
         categoryCompleteTitle: "CATEGORY COMPLETE",
         categoryCompleteFeedback: "Great! You finished all words in this category. Final Score: {score}"
@@ -332,7 +334,7 @@ function checkAnswer() {
         setTimeout(newRound, 500);
     } else {
         // MODIFIED: Penalty for wrong answer
-        timer -= 2;
+        timer -= 3;
         if (timer < 0) timer = 0; // Prevent negative timer
         timerEl.textContent = timer;
         feedbackEl.textContent = translations[currentLanguage].feedbackWrongPenalty;
@@ -344,7 +346,7 @@ function checkAnswer() {
 }
 
 function startTimer() {
-    // MODIFIED: Initial timer is 20 seconds
+    // MODIFIED: Initial timer is 30 seconds
     timer = 30;
     timerEl.textContent = timer;
     timerInterval = setInterval(() => {
@@ -362,16 +364,25 @@ function gameOver() {
     clearInterval(timerInterval);
     scrambledWordEl.textContent = translations[currentLanguage].gameOverTitle;
 
+    let scoreMessage;
+    let feedbackClass = "feedback"; // Default feedback class
+
     if (score > highScore) {
         highScore = score;
         localStorage.setItem(HIGH_SCORE_KEY, highScore);
         updateHighScoreDisplay();
-        feedbackEl.textContent = translations[currentLanguage].newRecordFeedback.replace('{score}', score);
-        feedbackEl.className = "feedback correct";
+        scoreMessage = translations[currentLanguage].newRecordFeedback.replace('{score}', score);
+        feedbackClass = "feedback correct"; // Use 'correct' class for high score
     } else {
-        feedbackEl.textContent = translations[currentLanguage].finalScoreFeedback.replace('{score}', score);
-        feedbackEl.className = "feedback";
+        scoreMessage = translations[currentLanguage].finalScoreFeedback.replace('{score}', score);
     }
+
+    // Create the message part that shows the correct word
+    const answerMessage = translations[currentLanguage].gameOverAnswer.replace('{word}', currentWord);
+
+    // Combine the score message with the answer message
+    feedbackEl.textContent = `${scoreMessage}. ${answerMessage}`;
+    feedbackEl.className = feedbackClass;
 
     wordInputEl.disabled = true;
     checkButton.classList.add('hidden');
