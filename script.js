@@ -15,6 +15,7 @@ const timerEl = document.getElementById('timer-value');
 const feedbackEl = document.getElementById('feedback');
 const highScoreStartEl = document.getElementById('high-score-start');
 const highScoreGameEl = document.getElementById('high-score-game');
+const currentCategoryNameEl = document.getElementById('current-category-name')
 
 // --- KAMUS TERJEMAHAN (BARU) ---
 const translations = {
@@ -334,6 +335,9 @@ function startGame() {
         alert(translations[currentLanguage].alertChooseCategory);
         return;
     }
+
+    currentCategoryNameEl.textContent = selectedCategory;
+
     categorySelectionEl.classList.add('hidden');
     gameAreaEl.classList.remove('hidden');
     langSwitcherEl.classList.add('disabled');
