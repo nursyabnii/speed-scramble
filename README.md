@@ -1,7 +1,7 @@
 # Acak Kata Cepat / Speed Scramble
 Sebuah game tebak kata berbasis web yang simpel, seru, dan adiktif. Susun huruf-huruf acak menjadi sebuah kata yang benar sebelum waktu habis! Game ini dibuat menggunakan HTML, CSS, dan JavaScript murni (Vanilla JS), tanpa memerlukan library atau framework eksternal.
 
-[Play Speed Scramble](https://word-game-gray-ten.vercel.app/)
+[Play Speed Scramble](https://speed-scramble-gray-ten.vercel.app/)
 
 ## ✨ Fitur Utama
 1. Gameplay Sederhana & Adiktif: Pemain harus menebak kata dari huruf yang diacak dalam batas waktu.
