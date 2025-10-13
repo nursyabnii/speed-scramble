@@ -30,7 +30,7 @@ Unduh atau Clone Repositori
 
 Bash
 
-git clone https://github.com/NAMA_USER_ANDA/NAMA_REPO_ANDA.git
+```git clone https://github.com/NAMA_USER_ANDA/NAMA_REPO_ANDA.git```
 (Atau cukup unduh file ZIP jika Anda tidak menggunakan Git)
 
 Buka Folder Proyek
