@@ -33,7 +33,7 @@ const translations = {
         backToMenuButton: "Kembali ke Menu",
         feedbackCorrect: "Benar! +5 detik",
         feedbackWrong: "Coba lagi!",
-        feedbackWrongPenalty: "Salah! -5 detik", // MODIFIED: Added new feedback for penalty
+        feedbackWrongPenalty: "Salah! -2 detik", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
         newRecordFeedback: "SELAMAT! REKOR BARU: {score}",
         finalScoreFeedback: "Skor Akhir Kamu: {score}",
@@ -55,7 +55,7 @@ const translations = {
         backToMenuButton: "Back to Menu",
         feedbackCorrect: "Correct! +5 seconds",
         feedbackWrong: "Try again!",
-        feedbackWrongPenalty: "Wrong! -5 seconds", // MODIFIED: Added new feedback for penalty
+        feedbackWrongPenalty: "Wrong! -2 seconds", // MODIFIED: Added new feedback for penalty
         gameOverTitle: "GAME OVER",
         newRecordFeedback: "CONGRATS! NEW HIGH SCORE: {score}",
         finalScoreFeedback: "Your Final Score: {score}",
@@ -323,8 +323,8 @@ function checkAnswer() {
     const playerAnswer = wordInputEl.value.toUpperCase();
     if (playerAnswer === currentWord) {
         score += 10;
-        // MODIFIED: Timer caps at 20 seconds
-        timer = Math.min(20, timer + 5);
+        // MODIFIED: Timer caps at 30 seconds
+        timer = Math.min(30, timer + 5);
         scoreEl.textContent = score;
         timerEl.textContent = timer;
         feedbackEl.textContent = translations[currentLanguage].feedbackCorrect;
@@ -332,7 +332,7 @@ function checkAnswer() {
         setTimeout(newRound, 500);
     } else {
         // MODIFIED: Penalty for wrong answer
-        timer -= 5;
+        timer -= 2;
         if (timer < 0) timer = 0; // Prevent negative timer
         timerEl.textContent = timer;
         feedbackEl.textContent = translations[currentLanguage].feedbackWrongPenalty;
@@ -345,7 +345,7 @@ function checkAnswer() {
 
 function startTimer() {
     // MODIFIED: Initial timer is 20 seconds
-    timer = 20;
+    timer = 30;
     timerEl.textContent = timer;
     timerInterval = setInterval(() => {
         timer--;
