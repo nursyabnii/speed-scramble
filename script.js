@@ -15,7 +15,20 @@ const timerEl = document.getElementById('timer-value');
 const feedbackEl = document.getElementById('feedback');
 const highScoreStartEl = document.getElementById('high-score-start');
 const highScoreGameEl = document.getElementById('high-score-game');
-const currentCategoryNameEl = document.getElementById('current-category-name')
+const currentCategoryNameEl = document.getElementById('current-category-name');
+
+// --- BARU: DEFINISI EFEK SUARA ---
+const correctSound = new Audio('sounds/correct.wav');
+const wrongSound = new Audio('sounds/wrong.wav');
+const gameOverSound = new Audio('sounds/game-over.wav');
+const clickSound = new Audio('sounds/click.wav');
+
+// Mengatur volume agar tidak terlalu keras
+correctSound.volume = 0.5;
+wrongSound.volume = 0.5;
+gameOverSound.volume = 0.6;
+clickSound.volume = 0.7;
+
 
 // --- KAMUS TERJEMAHAN (BARU) ---
 const translations = {
@@ -235,6 +248,7 @@ const LANG_KEY = 'acakKataLang';
 
 // FUNGSI BARU: Mengubah bahasa UI dan data
 function setLanguage(lang) {
+    clickSound.play(); // BARU: Mainkan suara klik
     currentLanguage = lang;
     localStorage.setItem(LANG_KEY, lang); // Simpan pilihan bahasa
 
@@ -298,10 +312,13 @@ function newRound() {
         scrambledWordEl.textContent = translations[currentLanguage].categoryCompleteTitle;
         feedbackEl.textContent = translations[currentLanguage].categoryCompleteFeedback.replace('{score}', score);
         if (score > highScore) {
+            gameOverSound.play(); // BARU: Suara spesial jika rekor baru
             highScore = score;
             localStorage.setItem(HIGH_SCORE_KEY, highScore);
             updateHighScoreDisplay();
             feedbackEl.textContent = translations[currentLanguage].newRecordFeedback.replace('{score}', score);
+        } else {
+            correctSound.play(); // BARU: Suara "berhasil" saat menyelesaikan kategori
         }
         wordInputEl.disabled = true;
         checkButton.classList.add('hidden');
@@ -324,6 +341,7 @@ function checkAnswer() {
 
     const playerAnswer = wordInputEl.value.toUpperCase();
     if (playerAnswer === currentWord) {
+        correctSound.play(); // BARU: Mainkan suara "benar"
         score += 10;
         // MODIFIED: Timer caps at 30 seconds
         timer = Math.min(30, timer + 2);
@@ -333,6 +351,7 @@ function checkAnswer() {
         feedbackEl.className = "feedback correct";
         setTimeout(newRound, 500);
     } else {
+        wrongSound.play(); // BARU: Mainkan suara "salah"
         // MODIFIED: Penalty for wrong answer
         timer -= 3;
         if (timer < 0) timer = 0; // Prevent negative timer
@@ -361,6 +380,7 @@ function startTimer() {
 }
 
 function gameOver() {
+    gameOverSound.play(); // BARU: Mainkan suara "game over"
     clearInterval(timerInterval);
     scrambledWordEl.textContent = translations[currentLanguage].gameOverTitle;
 
@@ -390,6 +410,7 @@ function gameOver() {
 }
 
 function startGame() {
+    clickSound.play(); // BARU: Mainkan suara klik
     selectedCategory = categorySelector.value;
     if (!selectedCategory) {
         alert(translations[currentLanguage].alertChooseCategory);
@@ -415,6 +436,7 @@ function startGame() {
 }
 
 function backToMenu() {
+    clickSound.play(); // BARU: Mainkan suara klik
     gameAreaEl.classList.add('hidden');
     categorySelectionEl.classList.remove('hidden');
     langSwitcherEl.classList.remove('disabled');
